@@ -1,0 +1,292 @@
+<section style="max-width: 677px; margin: 0 auto; font-size: 16px; color: #333; line-height: 1.8;">
+<h1 style="font-size: 22px; font-weight: bold; color: #000; margin: 30px 0 20px; padding-bottom: 10px; border-bottom: 2px solid #1890ff;">从零到一：我用70分钟打造了一个公众号排版神器</h1>
+<h2 style="font-size: 20px; font-weight: bold; color: #333; margin: 25px 0 15px; padding-left: 10px; border-left: 4px solid #1890ff;">引言</h2>
+<p style="margin: 15px 0; text-align: justify; text-indent: 2em;">今天，我决定动手解决一个困扰我已久的问题：每次写完文章，都要手动调整公众号排版，然后再复制到知乎、小红书等多个平台。这个过程既繁琐又低效。
+于是，我花了70分钟，从零开发了一个完整的公众号排版工具——WeChat Formatter。现在，我想把这个过程分享给大家。
+---
+1. <b>排版繁琐<b>：每次都要手动调整字体、颜色、间距
+2. <b>多平台分发<b>：同一内容要适配5个平台的格式
+3. <b>图片处理<b>：手动找图、下载、插入，耗时费力
+4. <b>重复劳动<b>：每次文章都要重复相同的工作
+我想做一个工具，能够：
+---
+| 技术栈 | 原因 |
+|--------|------|
+| Python | 简单易用，生态丰富 |
+| 阿里通义万相API | 图片生成质量高，价格合理 |
+| unittest | 测试框架成熟稳定 |
+| OpenClaw | 智能代理，易于集成 |
+---
+def generate_image(prompt, style="photography"):
+    return {
+        "model": "wanx-v1",
+        "input": {
+            "prompt": prompt,
+            "style": style,
+            "watermark": False  # 无水印
+        }
+    }
+cache_key = md5(url)
+local_path = f"cache/images/downloads/{cache_key}.jpg"
+FORMATTER_README.md          - 格式化器使用指南
+IMAGE_GENERATOR_GUIDE.md     - 图片生成指南
+IMAGE_CACHE_GUIDE.md        - 图片缓存指南
+NO_WATERMARK_GUIDE.md       - 无水印设置说明
+TEST_REPORT_50.md           - 测试报告
+FINAL_REPORT.md             - 总体报告
+SKILL.md                   - OpenClaw Skill指令
+markdown = """# 文章标题
+内容..."""
+enhanced = enhance_with_images(markdown, style="photography")
+adapted = adapt_to_platforms(enhanced["markdown"])
+print(adapted["wechat"])
+用户：帮我排版这篇文章
+系统：激活wechat-formatter Skill
+系统：完成格式化，输出HTML
+用户：帮我把这篇文章排版成公众号格式
+系统：自动激活wechat-formatter
+系统：输出排版后的HTML
+from formatter import adapt_to_platforms
+markdown = """# 文章标题
+内容..."""
+result = adapt_to_platforms(markdown)
+print(result["wechat"])  # 公众号HTML
+print(result["zhihu"])   # 知乎Markdown
+python demo_complete.py</p>
+<h2 style="font-size: 20px; font-weight: bold; color: #333; margin: 25px 0 15px; padding-left: 10px; border-left: 4px solid #1890ff;">第一步：需求分析</h2>
+<h3 style="font-size: 18px; font-weight: bold; color: #333; margin: 20px 0 12px;">痛点是什么？</h3>
+<h3 style="font-size: 18px; font-weight: bold; color: #333; margin: 20px 0 12px;">解决方案设计</h3>
+
+        <p style="margin: 10px 0; padding-left: 20px;">
+            <span style="display: inline-block; width: 6px; height: 6px; background: #1890ff; border-radius: 50%; margin-right: 10px;"></span>
+            ✅ 自动解析Markdown文章结构
+        </p>
+
+        <p style="margin: 10px 0; padding-left: 20px;">
+            <span style="display: inline-block; width: 6px; height: 6px; background: #1890ff; border-radius: 50%; margin-right: 10px;"></span>
+            ✅ 生成响应式HTML（适配公众号）
+        </p>
+
+        <p style="margin: 10px 0; padding-left: 20px;">
+            <span style="display: inline-block; width: 6px; height: 6px; background: #1890ff; border-radius: 50%; margin-right: 10px;"></span>
+            ✅ 自动适配多个平台（知乎、小红书、微博、头条）
+        </p>
+
+        <p style="margin: 10px 0; padding-left: 20px;">
+            <span style="display: inline-block; width: 6px; height: 6px; background: #1890ff; border-radius: 50%; margin-right: 10px;"></span>
+            ✅ 自动生成配图（AI）
+        </p>
+
+        <p style="margin: 10px 0; padding-left: 20px;">
+            <span style="display: inline-block; width: 6px; height: 6px; background: #1890ff; border-radius: 50%; margin-right: 10px;"></span>
+            ✅ 本地缓存图片，避免重复下载
+        </p>
+<h2 style="font-size: 20px; font-weight: bold; color: #333; margin: 25px 0 15px; padding-left: 10px; border-left: 4px solid #1890ff;">第二步：技术选型</h2>
+<h3 style="font-size: 18px; font-weight: bold; color: #333; margin: 20px 0 12px;">为什么选这些技术？</h3>
+<h3 style="font-size: 18px; font-weight: bold; color: #333; margin: 20px 0 12px;">为什么不选其他方案？</h3>
+
+        <p style="margin: 10px 0; padding-left: 20px;">
+            <span style="display: inline-block; width: 6px; height: 6px; background: #1890ff; border-radius: 50%; margin-right: 10px;"></span>
+            **在线工具**：需要登录，有数据泄露风险
+        </p>
+
+        <p style="margin: 10px 0; padding-left: 20px;">
+            <span style="display: inline-block; width: 6px; height: 6px; background: #1890ff; border-radius: 50%; margin-right: 10px;"></span>
+            **付费SaaS**：成本高，功能受限
+        </p>
+
+        <p style="margin: 10px 0; padding-left: 20px;">
+            <span style="display: inline-block; width: 6px; height: 6px; background: #1890ff; border-radius: 50%; margin-right: 10px;"></span>
+            **现成模板**：不够灵活，难以定制
+        </p>
+<h2 style="font-size: 20px; font-weight: bold; color: #333; margin: 25px 0 15px; padding-left: 10px; border-left: 4px solid #1890ff;">第三步：核心功能开发</h2>
+<h3 style="font-size: 18px; font-weight: bold; color: #333; margin: 20px 0 12px;">1. Markdown解析器</h3>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>解析逻辑：
+# 标题 → heading元素
+段落 → paragraph元素
+- 列表 → list元素</code></pre>
+        </div>
+<blockquote style="background: #f0f7ff; padding: 15px 20px; margin: 20px 0; border-left: 4px solid #1890ff; border-radius: 0 4px 4px 0; color: #666; font-style: italic;">
+            💬 引用 → quote元素
+        </blockquote>
+
+        <img src="url" alt="图片" style="display: block; width: 100%; max-width: 677px; margin: 20px auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+        <p style="text-align: center; font-size: 12px; color: #999; margin-top: 5px;">图片</p>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>
+**代码量**：165行
+
+### 2. 公众号排版器
+
+生成响应式HTML，包含：
+- 677px最大宽度（公众号推荐）
+- 字体大小18px（正文）
+- 标题渐变色
+- 代码块高亮
+- 引用块美化
+
+**代码量**：146行
+
+### 3. 平台适配器
+
+适配5个平台：
+
+| 平台 | 输出格式 | 特点 |
+|------|---------|------|
+| 公众号 | HTML | 富文本，样式优化 |
+| 知乎 | Markdown | 原始格式 |
+| 小红书 | Emoji+分段 | 🔸 ✨ 📌 |
+| 微博 | 140字摘要 | 自动截断 |
+| 头条 | 标题+正文 | 结构化数据 |
+
+**代码量**：101行
+
+### 4. 图片生成器
+
+集成阿里通义万相API：
+</code></pre>
+        </div>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>
+**代码量**：230行
+
+### 5. 图片缓存管理器
+
+基于URL的MD5哈希生成缓存key：
+</code></pre>
+        </div>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>
+**代码量**：190行
+
+---
+
+## 第四步：测试套件
+
+### 50个测试，100%通过
+
+测试覆盖：
+- MarkdownParser（10个）
+- WeChatFormatter（10个）
+- PlatformAdapter（10个）
+- ImageCache（10个）
+- Integration（10个）
+
+### 性能指标
+
+| 测试项 | 时间 |
+|--------|------|
+| 解析1000字 | ~5ms |
+| 格式化1000字 | ~2ms |
+| 平台适配（5个） | ~3ms |
+| 总体执行（50测试） | ~5ms |
+
+---
+
+## 第五步：文档和演示
+
+### 文档体系
+</code></pre>
+        </div>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>
+### 演示脚本
+</code></pre>
+        </div>
+<h1 style="font-size: 22px; font-weight: bold; color: #000; margin: 30px 0 20px; padding-bottom: 10px; border-bottom: 2px solid #1890ff;">demo_complete.py</h1>
+<h1 style="font-size: 22px; font-weight: bold; color: #000; margin: 30px 0 20px; padding-bottom: 10px; border-bottom: 2px solid #1890ff;">完整工作流</h1>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>
+---
+
+## 第六步：OpenClaw Skill集成
+
+### 自动激活机制
+
+当用户说类似以下内容时，自动激活：
+
+- "帮我把这篇文章排版成公众号格式"
+- "需要公众号文章排版"
+- "Markdown转HTML"
+
+### 使用方式
+</code></pre>
+        </div>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>
+---
+
+## 成果展示
+
+### 代码统计
+
+| 模块 | 代码量 |
+|------|--------|
+| Markdown解析 | 165行 |
+| 公众号排版 | 146行 |
+| 平台适配 | 101行 |
+| 图片生成 | 230行 |
+| 图片增强 | 200行 |
+| 图片缓存 | 190行 |
+| **核心代码** | **~1,000行** |
+| **测试代码** | **~2,000行** |
+| **文档** | **~2,000行** |
+| **总计** | **~5,000行** |
+
+### 功能清单
+
+- ✅ Markdown解析（标题、段落、列表、代码、引用、图片）
+- ✅ 公众号排版（响应式HTML，样式优化）
+- ✅ 平台适配（5个平台）
+- ✅ 图片生成（3种风格，无水印）
+- ✅ 图片缓存（本地存储，批量下载）
+- ✅ 测试套件（50个测试，100%通过）
+- ✅ OpenClaw Skill（自动激活）
+- ✅ GitHub仓库
+
+### 时间投入
+
+- **需求分析**：5分钟
+- **技术选型**：5分钟
+- **核心开发**：40分钟
+- **测试编写**：15分钟
+- **文档编写**：5分钟
+- **总计**：70分钟
+
+---
+
+## 使用指南
+
+### 方式1：OpenClaw Skill
+</code></pre>
+        </div>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>
+### 方式2：Python API
+</code></pre>
+        </div>
+
+        <div style="background: #f6f8fa; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; overflow-x: auto;">
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px;">📌 text</div>
+            <pre style="white-space: pre-wrap; margin: 0;"><code>
+### 方式3：命令行脚本
+</code></pre>
+        </div>
+</section>
