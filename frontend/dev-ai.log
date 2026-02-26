@@ -1,0 +1,12 @@
+
+> humanwriter-frontend@1.0.0 dev
+> next dev
+
+   ▲ Next.js 14.1.0
+   - Local:        http://localhost:3000
+
+ ✓ Ready in 1667ms
+ ○ Compiling /ai-humanizer ...
+ ✓ Compiled /ai-humanizer in 2.3s (486 modules)
+ ✓ Compiled in 288ms (236 modules)
+ ✓ Compiled in 276ms (222 modules)

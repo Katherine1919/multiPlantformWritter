@@ -1,0 +1,196 @@
+{
+  "name": "HumanWriter 一键分发工作流",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-1",
+      "name": "手动触发",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "content": "={{ $json.markdown }}",
+        "options": {}
+      },
+      "id": "set-1",
+      "name": "设置输入",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "command": "cd /home/admin/.openclaw/workspace/humanwriter && python -c \"\nfrom formatter.platform_adapter import adapt_to_platforms\nimport json\n\nmarkdown_content = '''{{ $json.markdown }}'''\nadapted = adapt_to_platforms(markdown_content)\nprint(json.dumps(adapted, ensure_ascii=False))\n\"",
+        "options": {}
+      },
+      "id": "exec-1",
+      "name": "调用格式化器",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $input.item.json.stdout;\ntry {\n  return JSON.parse(content);\n} catch (error) {\n  return { error: error.message, raw: content };\n}"
+      },
+      "id": "code-1",
+      "name": "解析输出",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.wechat }}",
+              "value2": ""
+            }
+          ]
+        }
+      },
+      "id": "if-1",
+      "name": "检查是否成功",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.api_url || 'http://localhost:8000/publish' }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"platforms\": [\"wechat\", \"zhihu\", \"xiaohongshu\", \"weibo\", \"toutiao\"],\n  \"content\": {\n    \"wechat\": {{ $json.wechat }},\n    \"zhihu\": {{ $json.zhihu }},\n    \"xiaohongshu\": {{ $json.xiaohongshu }},\n    \"weibo\": {{ $json.weibo }},\n    \"toutiao\": {{ $json.toutiao }}\n  }\n}",
+        "options": {}
+      },
+      "id": "http-1",
+      "name": "发布到所有平台",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, message: '格式化成功', data: $json } }}"
+      },
+      "id": "respond-1",
+      "name": "返回成功",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1560, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: false, message: '格式化失败', error: $json } }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "respond-2",
+      "name": "返回失败",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1340, 400]
+    }
+  ],
+  "connections": {
+    "手动触发": {
+      "main": [
+        [
+          {
+            "node": "设置输入",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "设置输入": {
+      "main": [
+        [
+          {
+            "node": "调用格式化器",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "调用格式化器": {
+      "main": [
+        [
+          {
+            "node": "解析输出",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析输出": {
+      "main": [
+        [
+          {
+            "node": "检查是否成功",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "检查是否成功": {
+      "main": [
+        [
+          {
+            "node": "发布到所有平台",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "返回失败",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "发布到所有平台": {
+      "main": [
+        [
+          {
+            "node": "返回成功",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-26T09:40:00.000Z",
+  "versionId": "1"
+}

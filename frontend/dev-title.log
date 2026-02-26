@@ -1,0 +1,13 @@
+
+> humanwriter-frontend@1.0.0 dev
+> next dev
+
+   ▲ Next.js 14.1.0
+   - Local:        http://localhost:3000
+
+ ✓ Ready in 1613ms
+ ○ Compiling /ai-title-generator ...
+ ✓ Compiled /ai-title-generator in 1995ms (482 modules)
+ ✓ Compiled in 184ms (234 modules)
+ ✓ Compiled in 341ms (234 modules)
+[?25h

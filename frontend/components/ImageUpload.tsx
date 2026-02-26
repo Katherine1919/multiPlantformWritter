@@ -82,8 +82,8 @@ export default function ImageUpload({ onImageSelect, selectedImage, onRemove }: 
 
         <button
           onClick={() => {
-            const prompt = prompt('输入图片描述：') || ''
-            if (prompt) handleGenerateImage(prompt)
+            const promptText = window.prompt('输入图片描述：') || ''
+            if (promptText) handleGenerateImage(promptText)
           }}
           disabled={generating}
           className="flex-1 flex items-center justify-center gap-2 p-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50"

@@ -6,7 +6,7 @@ import {
   Sparkles, Check, Download, Share2,
   AlertCircle, CheckCircle, Info
 } from 'lucide-react'
-import ImageUpload from './ImageUpload'
+import ImageUpload from '../components/ImageUpload'
 
 export default function Home() {
   const [input, setInput] = useState('')
